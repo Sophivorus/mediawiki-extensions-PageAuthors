@@ -60,6 +60,7 @@ class PageAuthors {
 			$wgPageAuthorsIgnoreGroups,
 			$wgPageAuthorsUseRealNames,
 			$wgPageAuthorsLinkUserPages,
+			$wgPageAuthorsShowUserNamespace,
 			$wgPageAuthorsDelimiter;
 		$title = $input ? Title::newFromText( $input ) : $parser->getTitle();
 		$id = $title->getArticleID();
@@ -115,12 +116,15 @@ class PageAuthors {
 			if ( $wgPageAuthorsIgnoreUsers && in_array( $author, $wgPageAuthorsIgnoreUsers ) ) {
 				continue;
 			}
+			$userPage = $revisionUser->getUserPage()->getFullText();
+			if ( $wgPageAuthorsShowUserNamespace ) {
+				$author = $userPage;
+			}
 			$realName = $revisionUser->getRealName();
 			if ( $wgPageAuthorsUseRealNames && $realName ) {
 				$author = $realName;
 			}
 			if ( $wgPageAuthorsLinkUserPages ) {
-				$userPage = $revisionUser->getUserPage()->getFullText();
 				$author = "[[$userPage|$author]]";
 			}
 			if ( array_key_exists( $author, $authors ) ) {
